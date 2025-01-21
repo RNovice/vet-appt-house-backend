@@ -1,0 +1,29 @@
+{
+  "treatedAnimals": [
+    { "id": 1, "species": "犬科" },
+    { "id": 2, "species": "貓科" },
+    { "id": 3, "species": "小型齧齒類(鼠)" },
+    { "id": 4, "species": "中型齧齒類(兔)" },
+    { "id": 5, "species": "飛禽科" },
+    { "id": 6, "species": "爬蟲科" },
+    { "id": 7, "species": "特寵專科" }
+  ],
+  "services": [
+    { "id": 1, "service": "一般內科" },
+    { "id": 2, "service": "一般外科" },
+    { "id": 3, "service": "皮膚科" },
+    { "id": 4, "service": "疫苗接種" },
+    { "id": 5, "service": "結紮手術" },
+    { "id": 6, "service": "牙科" },
+    { "id": 7, "service": "影像診斷(X光、超音波、CT/MRI)" },
+    { "id": 8, "service": "急診" },
+    { "id": 9, "service": "行為診療" },
+    { "id": 10, "service": "眼科" },
+    { "id": 11, "service": "腫瘤科" },
+    { "id": 12, "service": "泌尿科" },
+    { "id": 13, "service": "復健科" },
+    { "id": 14, "service": "寄生蟲防治" },
+    { "id": 15, "service": "繁殖服務" },
+    { "id": 16, "service": " 特殊動物" }
+  ]
+}
