@@ -104,6 +104,24 @@ function getRandomImgUrl() {
   return numbers;
 }
 
+function checkAllDay(hours) {
+  const numRows = hours.length;
+  const numCols = hours[0].length;
+
+  const result = Array(numCols).fill(true);
+
+  for (let col = 0; col < numCols; col++) {
+    for (let row = 1; row < numRows; row++) {
+      if (hours[row][col] !== hours[0][col]) {
+        result[col] = false;
+        break;
+      }
+    }
+  }
+
+  return !result.some(h => h === false);
+}
+
 axios('https://www.afurkid.com/Veterinary/Json').then(({ data }) => {
 
   const clinics = [];
@@ -130,6 +148,9 @@ axios('https://www.afurkid.com/Veterinary/Json').then(({ data }) => {
     const tel = formatTel(obj.Tel)
     const imageUrl = Math.floor(Math.random() * 20) + 1;
     const imagesUrl = getRandomImgUrl();
+    const isAllDay = checkAllDay(businessHours)
+    const hasWalkInAppt = Math.random() < 0.9
+    const hasParking = Math.random() > 0.5
 
     clinics.push({
       id: ix + 1,
@@ -149,6 +170,9 @@ axios('https://www.afurkid.com/Veterinary/Json').then(({ data }) => {
       imagesUrl,
       hasExoticPetTreat,
       isEnabled: true,
+      isAllDay,
+      hasWalkInAppt,
+      hasParking,
       licenseInfo: {
         licenseType: obj.LicenceType,
         licenseDate: obj.LicenceDate,
