@@ -16,7 +16,7 @@ const rules = auth.rewriter({
   vetClinics: 444,
   treatedAnimals: 444,
   services: 444,
-  users: 600
+  //users: 600
 })
 
 
