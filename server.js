@@ -14,9 +14,6 @@ const middleware = jsonServer.defaults();
 
 const rules = auth.rewriter({
   vetClinics: 444,
-  treatedAnimals: 444,
-  services: 444,
-  //users: 600
 })
 
 
@@ -34,6 +31,13 @@ server.get('/vetClinics', (req, res) => {
   }))
 
   res.json(expended)
+});
+
+server.use((req, res, next) => {
+  if (req.method !== "GET" && req.path.startsWith("/news")) {
+    return res.status(403).json({ error: "Read-only access" });
+  }
+  next();
 });
 
 server.db = router.db;
