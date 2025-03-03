@@ -57,7 +57,7 @@ function genTreatedAnimals(name, hasExotic) {
 
 function genSchedule() {
   const proportion = [
-    [0.1, 0.1, 0.1, 0.1, 0.1, 0.2, 0.6], // 早
+    [0.1, 0.1, 0.1, 0.1, 0.1, 0.4, 0.7], // 早
     [0.3, 0.2, 0.2, 0.2, 0.2, 0.5, 0.8], // 中
     [0.4, 0.3, 0.3, 0.3, 0.4, 0.6, 0.9]  // 晚
   ];
@@ -67,7 +67,7 @@ function genSchedule() {
 }
 
 function formatTel(tel) {
-  const addDash = (num) => num.slice(0, 3) + "-" + num.slice(3);
+  const addDash = (num) => num.slice(0, 2) + "-" + num.slice(2);
   switch (true) {
     case tel === '':
     case tel === null:
@@ -178,6 +178,12 @@ axios('https://www.afurkid.com/Veterinary/Json').then(({ data }) => {
         licenseDate: obj.LicenceDate,
         ownName: obj.OwnName,
       }
+      ,
+      HomeVisit: Math.random() > 0.8,
+      hasCallBooking: tel ? Math.random() > 0.05 : false,
+      MCParking: Math.random() > 0.4,
+      CarParking: Math.random() > 0.9,
+      hasMultiDisTreat: treatedAnimals.length >= 3,
     })
   })
 
