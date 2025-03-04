@@ -59,14 +59,15 @@ server.get('/vetClinics/:id?', (req, res) => {
 
   if (tag) {
     const tagRef = {
-      // hasExoticPetTreat: "特寵診療",
-      // HomeVisit: "到府診療",
+      hasExoticPetTreat: "特寵診療",
       hasEmergency: "夜間急診",
       isAllDay: "24HR營業",
       hasWalkInAppt: "現場預約",
       hasCallBooking: "電話預約",
-      MCParking: "汽車停車",
-      CarParking: "機車停車",
+      hasParking: "停車空間",
+      // HomeVisit: "到府診療",
+      // MCParking: "汽車停車",
+      // CarParking: "機車停車",
     }
 
     clinics = clinics.map(c => ({
