@@ -15,7 +15,7 @@ server.get('/vetClinics/:id?', (req, res) => {
   res.header('Access-Control-Allow-Origin', '*');
   const db = router.db;
   const vetClinics = db.get("vetClinics").value();
-  const treatedAnimals = db.get("treatedAnimals").value();
+  const treatedAnimals = db.get("species").value();
   const services = db.get("services").value();
   const mainImages = db.get("mainImages").value();
 
