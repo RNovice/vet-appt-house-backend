@@ -32,7 +32,7 @@ server.get('/vetClinics/:id?', (req, res) => {
   }
 
   let clinics = vetClinics.map(expandClinic);
-  const { city, district, day, time, keyword, req: required, tag, limit, page } = req.query;
+  const { city, district, day, time, keyword, req: required, tag, limit, page, status: activity } = req.query;
 
   if (city) clinics = clinics.filter(c => c.city === city);
   if (district) clinics = clinics.filter(c => c.district === district);
@@ -78,6 +78,15 @@ server.get('/vetClinics/:id?', (req, res) => {
     }));
   }
 
+  if (activity) {
+    if (activity === "enabled") {
+      clinics = clinics.filter(c => c.isEnabled);
+    }
+    else if (activity === "disabled") {
+      clinics = clinics.filter(c => !c.isEnabled);
+    }
+  }
+
   if (limit) {
     const pageNum = page ? parseInt(page) : 1;
     const limitNum = parseInt(limit);
@@ -105,6 +114,37 @@ server.use((req, res, next) => {
     return res.status(403).json({ error: "Read-only access" });
   }
   next();
+});
+
+server.patch("/vetClinics/:id/enable", (req, res) => {
+  const { id } = req.params;
+  const clinics = router.db.get("vetClinics");
+  const clinic = clinics.find({ id: Number(id) }).value();
+
+  if (!clinic) {
+    return res.status(404).json({ error: "Clinic not found" });
+  }
+
+  if (!clinic.isEnabled) {
+    router.db.get("vetClinics").find({ id: Number(id) }).assign({ isEnabled: true }).write();
+  }
+
+  res.json({ clinic });
+});
+server.patch("/vetClinics/:id/disable", (req, res) => {
+  const { id } = req.params;
+  const clinics = router.db.get("vetClinics");
+  const clinic = clinics.find({ id: Number(id) }).value();
+
+  if (!clinic) {
+    return res.status(404).json({ error: "Clinic not found" });
+  }
+
+  if (clinic.isEnabled) {
+    router.db.get("vetClinics").find({ id: Number(id) }).assign({ isEnabled: false }).write();
+  }
+
+  res.json({ clinic });
 });
 
 server.db = router.db;
