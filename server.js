@@ -117,6 +117,7 @@ server.use((req, res, next) => {
 });
 
 const updateClinicStatus = (req, res, status) => {
+  res.header('Access-Control-Allow-Origin', '*');
   const { id } = req.params;
   const clinic = router.db.get("vetClinics").find({ id: Number(id) });
 
