@@ -116,36 +116,24 @@ server.use((req, res, next) => {
   next();
 });
 
-server.patch("/vetClinics/:id/enable", (req, res) => {
+const updateClinicStatus = (req, res, status) => {
+  res.header('Access-Control-Allow-Origin', '*');
   const { id } = req.params;
-  const clinics = router.db.get("vetClinics");
-  const clinic = clinics.find({ id: Number(id) }).value();
+  const clinic = router.db.get("vetClinics").find({ id: Number(id) });
 
-  if (!clinic) {
+  if (!clinic.value()) {
     return res.status(404).json({ error: "Clinic not found" });
   }
 
-  if (!clinic.isEnabled) {
-    router.db.get("vetClinics").find({ id: Number(id) }).assign({ isEnabled: true }).write();
+  if (clinic.value().isEnabled !== status) {
+    clinic.assign({ isEnabled: status }).write();
   }
 
-  res.json({ clinic });
-});
-server.patch("/vetClinics/:id/disable", (req, res) => {
-  const { id } = req.params;
-  const clinics = router.db.get("vetClinics");
-  const clinic = clinics.find({ id: Number(id) }).value();
+  res.json({ clinic: clinic.value() });
+};
 
-  if (!clinic) {
-    return res.status(404).json({ error: "Clinic not found" });
-  }
-
-  if (clinic.isEnabled) {
-    router.db.get("vetClinics").find({ id: Number(id) }).assign({ isEnabled: false }).write();
-  }
-
-  res.json({ clinic });
-});
+server.patch("/vetClinics/:id/enable", (req, res) => updateClinicStatus(req, res, true));
+server.patch("/vetClinics/:id/disable", (req, res) => updateClinicStatus(req, res, false));
 
 server.db = router.db;
 server.use(middleware);
