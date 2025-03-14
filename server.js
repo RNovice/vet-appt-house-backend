@@ -87,26 +87,22 @@ server.get('/vetClinics/:id?', (req, res) => {
     }
   }
 
-  if (limit) {
-    const pageNum = page ? parseInt(page) : 1;
-    const limitNum = parseInt(limit);
-    const total = clinics.length;
-    const startIndex = (pageNum - 1) * limitNum;
-    const paginatedData = clinics.slice(startIndex, startIndex + limitNum);
+  const pageNum = page ? parseInt(page) : 1;
+  const limitNum = parseInt(limit || 10);
+  const total = clinics.length;
+  const startIndex = (pageNum - 1) * limitNum;
+  const paginatedData = clinics.slice(startIndex, startIndex + limitNum);
 
-    return res.json({
-      data: paginatedData,
-      pagination: {
-        total,
-        current: pageNum,
-        totalPages: Math.ceil(total / limitNum),
-        hasNextPage: startIndex + limitNum < total,
-        hasPrevPage: startIndex > 0,
-      },
-    });
-  }
-
-  res.json(clinics);
+  return res.json({
+    data: paginatedData,
+    pagination: {
+      total,
+      current: pageNum,
+      totalPages: Math.ceil(total / limitNum),
+      hasNextPage: startIndex + limitNum < total,
+      hasPrevPage: startIndex > 0,
+    },
+  });
 });
 
 server.use((req, res, next) => {
@@ -134,6 +130,17 @@ const updateClinicStatus = (req, res, status) => {
 
 server.patch("/vetClinics/:id/enable", (req, res) => updateClinicStatus(req, res, true));
 server.patch("/vetClinics/:id/disable", (req, res) => updateClinicStatus(req, res, false));
+
+server.get("/clinicAnalyze", (req, res) => {
+  res.header('Access-Control-Allow-Origin', '*');
+  const db = router.db;
+  const clinics = db.get("vetClinics").value();
+  const cityClinicAmount = clinics.reduce((acc, {city}) => {
+    acc[city] = (acc[city] ?? 0) + 1;
+    return acc
+  }, {})
+  res.json({ totalClinic: clinics.length, cityClinicAmount });
+})
 
 server.db = router.db;
 server.use(middleware);
